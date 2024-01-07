@@ -58,7 +58,7 @@ func main() {
 		}
 	}
 
-	csvURL := fmt.Sprintf("https://global.americanexpress.com/api/servicing/v1/financials/documents?file_format=csv&limit=3&status=posted&account_key=%s&client_id=AmexAPI", accountKey)
+	csvURL := fmt.Sprintf("https://global.americanexpress.com/api/servicing/v1/financials/documents?file_format=csv&limit=100&status=posted&account_key=%s&client_id=AmexAPI", accountKey)
 
 	download, err := page.ExpectDownload(func() error {
 		page.Goto(csvURL)
