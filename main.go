@@ -16,8 +16,13 @@ func main() {
 		log.Fatalf("could not start playwright: %v", err)
 	}
 
+	headless := true
+	if os.Getenv("HEADLESS") == "false" {
+		headless = false
+	}
+
 	browser, err := pw.Firefox.Launch(playwright.BrowserTypeLaunchOptions{
-		Headless: playwright.Bool(true),
+		Headless: playwright.Bool(headless),
 	})
 
 	page, err := browser.NewPage()
