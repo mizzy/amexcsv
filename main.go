@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/url"
 	"os"
+	"time"
 
 	"github.com/playwright-community/playwright-go"
 )
@@ -64,10 +65,25 @@ func main() {
 		}
 	}
 
-	csvURL := fmt.Sprintf("https://global.americanexpress.com/api/servicing/v1/financials/documents?file_format=csv&limit=200&status=posted&account_key=%s&client_id=AmexAPI", accountKey)
+	csvURL, _ := url.Parse("https://global.americanexpress.com/api/servicing/v1/financials/documents")
+
+	q := csvURL.Query()
+	q.Set("file_format", "csv")
+	q.Set("limit", "200")
+	q.Set("status", "posted")
+	q.Set("account_key", accountKey)
+
+	// 締め日の翌日は、締め日までのCSVを取得
+	now := time.Now()
+	if now.Day() == 6 {
+		date := now.Add(-24 * time.Hour)
+		q.Set("statement_end_date", fmt.Sprintf("%s", date.Format("2006-01-02")))
+	}
+
+	csvURL.RawQuery = q.Encode()
 
 	download, err := page.ExpectDownload(func() error {
-		page.Goto(csvURL)
+		page.Goto(csvURL.String())
 		return nil
 	})
 
