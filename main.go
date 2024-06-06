@@ -46,7 +46,7 @@ func main() {
 
 	page.WaitForURL("https://global.americanexpress.com/dashboard")
 
-	href, err := page.GetByTitle("ご利用履歴を確認").GetAttribute("href")
+	href, err := page.GetByTitle("ご利用履歴").Nth(0).GetAttribute("href")
 
 	if err != nil {
 		log.Fatal(err)
